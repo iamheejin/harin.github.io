@@ -1,92 +1,483 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>우리 하린이 첫돌 초대장</title>
+  <meta name="description" content="2026년 11월 14일 토요일 오후 12시, 경복궁 노원점에서 하린이의 첫 생일을 함께해 주세요.">
+  <meta property="og:title" content="우리 하린이 첫돌 초대장">
+  <meta property="og:description" content="2026년 11월 14일 토요일 오후 12시 · 경복궁 노원점">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      background: #f8f3eb;
-      color: #51473e;
-      font-family: sans-serif;
+      background:
+        radial-gradient(circle at 20% 10%, #f3eadc 0, transparent 42%),
+        #e6d9c6;
+      color: #4a3d33;
+      font-family: "Nanum Myeongjo", serif;
+      line-height: 1.85;
+    }
+    .card {
+      max-width: 440px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: #fbf7f1;
+      box-shadow: 0 18px 50px rgba(90, 62, 32, 0.12);
+    }
+    .cover {
+      padding: 48px 28px 36px;
       text-align: center;
-      line-height: 1.8;
+      background:
+        linear-gradient(180deg, rgba(251, 247, 241, 0) 0%, #fbf7f1 100%),
+        radial-gradient(circle at 50% 0%, #f4e7d4, #fbf7f1 70%);
     }
-    main {
-      max-width: 480px;
-      margin: 24px auto;
-      padding: 28px 22px;
-      background: #fffdf9;
-      border-radius: 18px;
+    .eyebrow {
+      margin: 0;
+      color: #b08968;
+      font-size: 15px;
+      letter-spacing: 0.12em;
     }
-    .hero {
+    .frame {
+      width: 230px;
+      height: 300px;
+      margin: 28px auto 22px;
+      padding: 8px;
+      border: 1px solid #e4d3be;
+      border-radius: 140px 140px 18px 18px;
+      background: #fff;
+    }
+    .frame img {
       width: 100%;
-      border-radius: 14px;
+      height: 100%;
       object-fit: cover;
-    }
-    .sub { color: #ad8b61; letter-spacing: 3px; }
-    h1 { font-size: 28px; margin: 16px 0; }
-    h2 { font-size: 20px; margin-top: 30px; }
-    .button {
+      object-position: center 30%;
+      border-radius: 132px 132px 12px 12px;
       display: block;
-      margin: 12px 0;
-      padding: 12px;
-      border-radius: 10px;
-      background: #a98762;
-      color: white;
-      text-decoration: none;
+    }
+    h1 {
+      margin: 0;
+      font-size: 42px;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      text-indent: 0.28em;
+    }
+    .countdown {
+      margin: 8px 0 0;
+      color: #a67c52;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    section { padding: 8px 28px 36px; text-align: center; }
+    .rule {
+      width: 36px;
+      height: 1px;
+      margin: 0 auto 22px;
+      background: #c4a484;
+    }
+    h2 {
+      margin: 0 0 16px;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+    }
+    .letter p { margin: 0 0 8px; }
+    .gallery[hidden],
+    .viewer[hidden] { display: none; }
+    .photos {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+    }
+    .photo { margin: 0; }
+    .shot {
+      display: block;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #f3e6d4;
+      aspect-ratio: 1;
+      cursor: pointer;
+    }
+    .shot img,
+    .shot video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+    }
+    .shot.is-video { position: relative; }
+    .shot.is-video::after {
+      content: "영상";
+      position: absolute;
+      left: 8px;
+      bottom: 8px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(48, 38, 30, 0.72);
+      color: #fff;
+      font-size: 12px;
+    }
+    .viewer {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      padding: 24px 18px 28px;
+      background: rgba(48, 38, 30, 0.94);
+    }
+    .viewer img,
+    .viewer video {
+      max-width: 100%;
+      max-height: calc(100vh - 168px);
+      object-fit: contain;
+      border-radius: 12px;
+      background: #000;
+    }
+    .viewer img[hidden],
+    .viewer video[hidden] { display: none; }
+    .viewer-caption {
+      margin: 0;
+      color: #fff;
+      font-size: 16px;
+      text-align: center;
+    }
+    .viewer-bar {
+      display: flex;
+      gap: 10px;
+    }
+    .viewer-bar button {
+      min-width: 76px;
+      padding: 10px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      border-radius: 999px;
+      background: transparent;
+      color: #fff;
+      font-family: inherit;
+      font-size: 15px;
+    }
+    .calendar { padding-top: 4px; }
+    .month {
+      margin: 0 0 14px;
+      font-size: 20px;
+      letter-spacing: 0.12em;
+      color: #8d7358;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td { padding: 7px 0; font-weight: 400; }
+    th { color: #b08968; font-size: 12px; }
+    td.sun, th.sun { color: #c47a7a; }
+    td.sat, th.sat { color: #7f93b5; }
+    td.mark span {
+      display: inline-grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #b08968;
+      color: #fff;
     }
     .info {
-      padding: 15px;
-      background: #f8f3eb;
-      border-radius: 12px;
+      margin: 0 8px;
+      padding: 6px 18px;
+      background: #f6efe6;
+      border-radius: 16px;
+    }
+    .row {
+      padding: 16px 0;
+      border-bottom: 1px solid #eadfd0;
+    }
+    .row:last-child { border-bottom: 0; }
+    .label {
+      display: block;
+      margin-bottom: 2px;
+      color: #b08968;
+      font-size: 12px;
+      letter-spacing: 0.22em;
+    }
+    .row strong { font-weight: 700; }
+    .place { margin: 2px 0 0; font-size: 14px; color: #7a6a5c; }
+    .button {
+      display: block;
+      margin: 8px 28px 0;
+      padding: 14px;
+      border: 1px solid #b08968;
+      border-radius: 999px;
+      background: #b08968;
+      color: #fff;
+      text-align: center;
+      text-decoration: none;
+      letter-spacing: 0.12em;
+    }
+    footer {
+      padding: 36px 28px 48px;
+      text-align: center;
+      color: #a08b76;
+      font-size: 13px;
     }
   </style>
 </head>
 <body>
-  <main>
-    <p class="sub">FIRST BIRTHDAY</p>
+  <main class="card">
+    <header class="cover">
+      <p class="eyebrow">첫 생일</p>
+      <!-- 상단 사진은 사진/메인.jpg 입니다 -->
+      <div class="frame">
+        <img src="사진/메인.jpg"
+             alt="하린이 사진">
+      </div>
+      <h1>하린</h1>
+    </header>
 
-    <!-- 사진을 준비하면 아래 주소를 교체하세요 -->
-    <img class="hero"
-      src="https://placehold.co/600x750/f1e5d5/8c7358?text=Our+Baby"
-      alt="우리 아이 사진">
+    <section class="letter">
+      <div class="rule"></div>
+      <h2>초대합니다</h2>
+      <p>
+        작은 천사로 우리에게 찾아온<br>
+        소중한 하린이가
+      </p>
+      <p>어느덧 첫 번째 생일을 맞이했습니다.</p>
+      <p>기쁜 날, 함께 축하해 주시면<br>감사하겠습니다.</p>
+    </section>
 
-    <h1>우리 아이의 첫 번째 생일</h1>
-    <p>
-      작은 천사로 우리에게 찾아온 소중한 아이가<br>
-      어느덧 첫 번째 생일을 맞이했습니다.
-    </p>
-    <p>기쁜 날, 함께 축하해 주시면 감사하겠습니다.</p>
+    <!-- 촬영일 기준. D+는 생일 2025년 11월 16일부터 계산하고, 날짜는 사진을 열었을 때만 보입니다. -->
+    <section class="gallery" id="gallery" hidden>
+      <div class="rule"></div>
+      <h2>성장 앨범</h2>
+      <div class="photos" id="photos"></div>
+    </section>
 
-    <h2>초대합니다</h2>
-    <div class="info">
-      <p>📅 2026년 12월 00일 (요일)</p>
-      <p>🕒 오후 12시 00분</p>
-      <p>📍 ○○호텔 ○층 ○○홀</p>
-    </div>
+    <section class="calendar">
+      <p class="month">2026년 11월</p>
+      <table aria-label="2026년 11월 달력">
+        <thead>
+          <tr>
+            <th class="sun">일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th class="sat">토</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="sun">1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td class="sat">7</td>
+          </tr>
+          <tr>
+            <td class="sun">8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td class="sat mark"><span>14</span></td>
+          </tr>
+          <tr>
+            <td class="sun">15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td><td class="sat">21</td>
+          </tr>
+          <tr>
+            <td class="sun">22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td><td class="sat">28</td>
+          </tr>
+          <tr>
+            <td class="sun">29</td><td>30</td><td></td><td></td><td></td><td></td><td></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
 
-    <h2>마음 전하는 곳</h2>
-    <p>계좌 안내가 필요하다면 이곳에 작성하세요.</p>
+    <section>
+      <div class="info">
+        <div class="row">
+          <span class="label">일시</span>
+          <strong>2026년 11월 14일 토요일</strong><br>
+          오후 12시
+          <p class="countdown" id="countdown"></p>
+        </div>
+        <div class="row">
+          <span class="label">장소</span>
+          <strong>경복궁 노원점</strong>
+          <p class="place">서울 노원구 동일로 1608</p>
+        </div>
+      </div>
+    </section>
 
     <a class="button"
-       href="https://map.naver.com/"
+       href="https://map.naver.com/p/search/%EA%B2%BD%EB%B3%B5%EA%B6%81%20%EB%85%B8%EC%9B%90%EC%A0%90"
        target="_blank" rel="noopener">
       오시는 길
     </a>
 
-    <a class="button"
-       href="https://forms.google.com/"
-       target="_blank" rel="noopener">
-      참석 여부 알려주기
-    </a>
-
-    <p style="margin-top:32px;font-size:12px;color:#998b7b">
-      소중한 걸음으로 함께해 주세요 ♡
-    </p>
+    <footer>소중한 걸음으로 함께해 주세요</footer>
   </main>
+
+  <div class="viewer" id="viewer" hidden>
+    <img id="viewer-img" alt="하린이 사진">
+    <video id="viewer-video" playsinline controls hidden></video>
+    <p class="viewer-caption" id="viewer-caption"></p>
+    <div class="viewer-bar">
+      <button type="button" id="viewer-prev">이전</button>
+      <button type="button" id="viewer-close">닫기</button>
+      <button type="button" id="viewer-next">다음</button>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var seoul = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Seoul",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      });
+      var today = seoul.format(new Date());
+      var days = Math.round((Date.parse("2026-11-14") - Date.parse(today)) / 86400000);
+      var countdown = document.getElementById("countdown");
+      if (days > 0) countdown.textContent = "D-" + days;
+      else if (days === 0) countdown.textContent = "Today";
+      else countdown.hidden = true;
+
+      var birth = "2025-11-16";
+      var sources = [
+        { src: "사진/KakaoTalk_20261025_115807410.mp4", date: "2025-04-23", video: true },
+        { src: "사진/KakaoTalk_20261025_113028534.jpg", date: "2025-11-16" },
+        { src: "사진/KakaoTalk_20261025_113135830.jpg", date: "2025-12-04" },
+        { src: "사진/KakaoTalk_20261025_113114382.jpg", date: "2025-12-08" },
+        { src: "사진/KakaoTalk_20261025_113318314.jpg", date: "2026-01-01" },
+        { src: "사진/KakaoTalk_20261025_113359787.jpg", date: "2026-02-18" },
+        { src: "사진/KakaoTalk_20261025_113429147.jpg", date: "2026-03-07" },
+        { src: "사진/KakaoTalk_20261025_113529689.jpg", date: "2026-04-02" },
+        { src: "사진/KakaoTalk_20261025_113647187.jpg", date: "2026-05-07" },
+        { src: "사진/KakaoTalk_20261025_113850179.jpg", date: "2026-06-12" },
+        { src: "사진/KakaoTalk_20261025_114002700.jpg", date: "2026-07-14" },
+        { src: "사진/KakaoTalk_20261025_114023913.jpg", date: "2026-08-15" },
+        { src: "사진/KakaoTalk_20261025_114053718.jpg", date: "2026-08-31" },
+        { src: "사진/KakaoTalk_20261025_121312575.jpg", date: "2026-09-19" },
+        { src: "사진/KakaoTalk_20261025_114332228.jpg", date: "2026-10-03" }
+      ];
+
+      function formatDate(iso) {
+        var parts = iso.split("-");
+        return Number(parts[0]) + "년 " + Number(parts[1]) + "월 " + Number(parts[2]) + "일";
+      }
+
+      function daysAfterBirth(iso) {
+        return Math.round((Date.parse(iso) - Date.parse(birth)) / 86400000);
+      }
+
+      function captionText(item) {
+        if (!item.date) return "";
+        var days = daysAfterBirth(item.date);
+        if (days < 0) return formatDate(item.date) + " · 태어나기 " + (-days) + "일 전";
+        return formatDate(item.date) + " · D+" + days;
+      }
+
+      function renderGallery() {
+        var section = document.getElementById("gallery");
+        var box = document.getElementById("photos");
+
+        sources.forEach(function (item, i) {
+          var figure = document.createElement("figure");
+          figure.className = "photo";
+          var button = document.createElement("button");
+          button.type = "button";
+          button.className = "shot";
+          if (item.video) {
+            button.className = "shot is-video";
+            button.setAttribute("aria-label", "영상 재생");
+            var thumb = document.createElement("video");
+            thumb.muted = true;
+            thumb.playsInline = true;
+            thumb.preload = "metadata";
+            thumb.src = item.src + "#t=0.1";
+            thumb.setAttribute("aria-hidden", "true");
+            button.appendChild(thumb);
+          } else {
+            button.setAttribute("aria-label", "하린이 사진 " + (i + 1) + " 크게 보기");
+            var img = document.createElement("img");
+            img.src = item.src;
+            img.alt = "하린이 사진 " + (i + 1);
+            button.appendChild(img);
+          }
+          button.addEventListener("click", function () { openViewer(i); });
+          figure.appendChild(button);
+          box.appendChild(figure);
+        });
+        section.hidden = false;
+      }
+
+      renderGallery();
+
+      var viewer = document.getElementById("viewer");
+      var viewerImg = document.getElementById("viewer-img");
+      var viewerVideo = document.getElementById("viewer-video");
+      var prevBtn = document.getElementById("viewer-prev");
+      var nextBtn = document.getElementById("viewer-next");
+      var current = 0;
+
+      function stopVideo() {
+        viewerVideo.pause();
+        viewerVideo.removeAttribute("src");
+        viewerVideo.load();
+      }
+
+      function showCurrent() {
+        var item = sources[current];
+        var caption = document.getElementById("viewer-caption");
+        caption.textContent = captionText(item);
+        caption.hidden = !item.date;
+        if (item.video) {
+          viewerImg.hidden = true;
+          viewerVideo.hidden = false;
+          viewerVideo.src = item.src;
+          viewerVideo.play().catch(function () {});
+        } else {
+          stopVideo();
+          viewerVideo.hidden = true;
+          viewerImg.hidden = false;
+          viewerImg.src = item.src;
+          viewerImg.alt = captionText(item) || "하린이 사진";
+        }
+        var alone = sources.length < 2;
+        prevBtn.hidden = alone;
+        nextBtn.hidden = alone;
+      }
+
+      function openViewer(i) {
+        current = i;
+        showCurrent();
+        viewer.hidden = false;
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeViewer() {
+        stopVideo();
+        viewer.hidden = true;
+        document.body.style.overflow = "";
+      }
+
+      document.getElementById("viewer-close").addEventListener("click", closeViewer);
+      prevBtn.addEventListener("click", function () {
+        current = (current - 1 + sources.length) % sources.length;
+        showCurrent();
+      });
+      nextBtn.addEventListener("click", function () {
+        current = (current + 1) % sources.length;
+        showCurrent();
+      });
+      viewer.addEventListener("click", function (e) {
+        if (e.target === viewer) closeViewer();
+      });
+      document.addEventListener("keydown", function (e) {
+        if (viewer.hidden) return;
+        if (e.key === "Escape") closeViewer();
+      });
+    })();
+  </script>
 </body>
 </html>
