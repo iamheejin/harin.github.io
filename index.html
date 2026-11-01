@@ -10,82 +10,131 @@
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Hi+Melody&family=Nanum+Gothic:wght@400;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      background:
-        radial-gradient(circle at 20% 10%, #f3eadc 0, transparent 42%),
-        #e6d9c6;
-      color: #4a3d33;
-      font-family: "Nanum Myeongjo", serif;
+      color: #4a3144;
+      font-family: "Nanum Gothic", sans-serif;
       line-height: 1.85;
+      background:
+        radial-gradient(circle at 8% 6%, #fff 0 1.5px, transparent 2px),
+        radial-gradient(circle at 22% 14%, #fff 0 1px, transparent 1.8px),
+        radial-gradient(circle at 78% 8%, #fff 0 1.6px, transparent 2.2px),
+        radial-gradient(circle at 90% 22%, #fff 0 1px, transparent 1.6px),
+        radial-gradient(circle at 14% 40%, rgba(255, 255, 255, 0.9) 0 1px, transparent 1.6px),
+        radial-gradient(circle at 86% 58%, #fff 0 1.4px, transparent 2px),
+        radial-gradient(circle at 50% -10%, rgba(255, 255, 255, 0.85), transparent 46%),
+        linear-gradient(180deg, #b9d4f2 0%, #f7c9dc 46%, #f6e3bf 100%);
     }
     .card {
+      position: relative;
       max-width: 440px;
-      margin: 0 auto;
-      min-height: 100vh;
-      background: #fbf7f1;
-      box-shadow: 0 18px 50px rgba(90, 62, 32, 0.12);
-    }
-    .cover {
-      padding: 48px 28px 36px;
-      text-align: center;
+      margin: 14px auto;
+      min-height: calc(100vh - 28px);
+      padding: 18px 0 8px;
+      border-radius: 28px;
+      overflow: hidden;
       background:
-        linear-gradient(180deg, rgba(251, 247, 241, 0) 0%, #fbf7f1 100%),
-        radial-gradient(circle at 50% 0%, #f4e7d4, #fbf7f1 70%);
+        radial-gradient(circle at 18% 8%, rgba(255, 255, 255, 0.9) 0 1px, transparent 1.6px),
+        radial-gradient(circle at 82% 12%, rgba(255, 248, 220, 0.95) 0 1.2px, transparent 1.8px),
+        linear-gradient(180deg, #fffdfb 0%, #fff4f7 38%, #fffaf3 100%);
+      box-shadow: 0 18px 50px rgba(70, 40, 70, 0.16);
+    }
+    .card::before {
+      content: "";
+      pointer-events: none;
+      position: absolute;
+      inset: 10px;
+      border-radius: 22px;
+      border: 1px solid #e4c27a;
+      box-shadow: inset 0 0 0 4px rgba(255, 251, 247, 0.65), inset 0 0 0 5px #f3ddb0;
+    }
+    .cover,
+    section,
+    .button,
+    footer { position: relative; z-index: 1; }
+    .cover {
+      padding: 42px 28px 28px;
+      text-align: center;
     }
     .eyebrow {
       margin: 0;
-      color: #b08968;
-      font-size: 15px;
-      letter-spacing: 0.12em;
+      color: #a56b86;
+      font-size: 16px;
+      letter-spacing: 0.18em;
     }
+    .sparkle {
+      display: inline-block;
+      color: #d4a24c;
+      letter-spacing: 0;
+      animation: twinkle 2.6s ease-in-out infinite;
+    }
+    .sparkle.late { animation-delay: 0.8s; }
     .frame {
-      width: 230px;
-      height: 300px;
-      margin: 28px auto 22px;
-      padding: 8px;
-      border: 1px solid #e4d3be;
-      border-radius: 140px 140px 18px 18px;
-      background: #fff;
+      width: 236px;
+      height: 308px;
+      margin: 26px auto 18px;
+      padding: 7px;
+      border-radius: 150px 150px 22px 22px;
+      background: linear-gradient(160deg, #fff4c8, #e0b154 38%, #fff1c2 62%, #b8862e);
+      box-shadow:
+        0 14px 28px rgba(176, 120, 48, 0.28),
+        0 0 0 6px rgba(255, 244, 214, 0.7);
     }
     .frame img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       object-position: center 30%;
-      border-radius: 132px 132px 12px 12px;
+      border-radius: 142px 142px 16px 16px;
       display: block;
     }
     h1 {
       margin: 0;
-      font-size: 42px;
-      font-weight: 700;
-      letter-spacing: 0.28em;
-      text-indent: 0.28em;
+      color: #a33d62;
+      font-family: "Hi Melody", "Nanum Gothic", serif;
+      font-size: 68px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-indent: 0.12em;
+      line-height: 1.1;
+      text-shadow: 0 2px 0 #fff, 0 10px 18px rgba(196, 107, 140, 0.22);
     }
     .countdown {
       margin: 8px 0 0;
-      color: #a67c52;
-      font-size: 16px;
+      color: #b4234a;
+      font-size: 18px;
       font-weight: 700;
     }
-    section { padding: 8px 28px 36px; text-align: center; }
+    section { padding: 8px 28px 34px; text-align: center; }
     .rule {
-      width: 36px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 168px;
+      margin: 0 auto 16px;
+      color: #d4a24c;
+      font-size: 13px;
+      line-height: 1;
+    }
+    .rule::before,
+    .rule::after {
+      content: "";
       height: 1px;
-      margin: 0 auto 22px;
-      background: #c4a484;
+      flex: 1;
+      background: #e4c27a;
     }
     h2 {
       margin: 0 0 16px;
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: 0.18em;
+      color: #8d3f5c;
+      font-family: "Hi Melody", "Nanum Gothic", serif;
+      font-size: 34px;
+      font-weight: 400;
+      letter-spacing: 0.06em;
     }
-    .letter p { margin: 0 0 8px; }
+    .letter p { margin: 0 0 8px; font-size: 16px; }
     .gallery[hidden],
     .viewer[hidden] { display: none; }
     .photos {
@@ -98,13 +147,14 @@
       display: block;
       width: 100%;
       margin: 0;
-      padding: 0;
+      padding: 3px;
       border: 0;
-      border-radius: 12px;
+      border-radius: 16px;
       overflow: hidden;
-      background: #f3e6d4;
+      background: linear-gradient(160deg, #fff6d4, #e4c27a);
       aspect-ratio: 1;
       cursor: pointer;
+      box-shadow: 0 6px 14px rgba(160, 90, 110, 0.12);
     }
     .shot img,
     .shot video {
@@ -113,6 +163,30 @@
       object-fit: cover;
       display: block;
       pointer-events: none;
+      border-radius: 13px;
+    }
+    .more {
+      display: block;
+      width: 100%;
+      margin: 0;
+      padding: 3px;
+      border: 0;
+      border-radius: 16px;
+      aspect-ratio: 1;
+      cursor: pointer;
+      background: linear-gradient(160deg, #fff6d4, #e4c27a);
+      box-shadow: 0 6px 14px rgba(160, 90, 110, 0.12);
+      font-family: "Hi Melody", "Nanum Gothic", serif;
+      font-size: 24px;
+      color: #8d3f5c;
+    }
+    .more span {
+      display: grid;
+      place-items: center;
+      width: 100%;
+      height: 100%;
+      border-radius: 13px;
+      background: linear-gradient(180deg, #fff, #fff4f8);
     }
     .shot.is-video { position: relative; }
     .shot.is-video::after {
@@ -122,7 +196,7 @@
       bottom: 8px;
       padding: 2px 8px;
       border-radius: 999px;
-      background: rgba(48, 38, 30, 0.72);
+      background: rgba(48, 32, 58, 0.72);
       color: #fff;
       font-size: 12px;
     }
@@ -136,107 +210,121 @@
       justify-content: center;
       gap: 18px;
       padding: 24px 18px 28px;
-      background: rgba(48, 38, 30, 0.94);
+      background:
+        radial-gradient(circle at 20% 12%, rgba(255, 255, 255, 0.18) 0 1px, transparent 2px),
+        radial-gradient(circle at 80% 20%, rgba(255, 244, 200, 0.45) 0 1px, transparent 2px),
+        rgba(32, 24, 58, 0.94);
     }
     .viewer img,
     .viewer video {
       max-width: 100%;
       max-height: calc(100vh - 168px);
       object-fit: contain;
-      border-radius: 12px;
-      background: #000;
+      border-radius: 16px;
+      background: #1b1428;
+      box-shadow: 0 0 0 3px rgba(228, 194, 122, 0.8);
     }
     .viewer img[hidden],
     .viewer video[hidden] { display: none; }
     .viewer-caption {
       margin: 0;
-      color: #fff;
+      color: #fff8ea;
       font-size: 16px;
       text-align: center;
     }
-    .viewer-bar {
-      display: flex;
-      gap: 10px;
-    }
+    .viewer-bar { display: flex; gap: 10px; }
     .viewer-bar button {
       min-width: 76px;
       padding: 10px 16px;
-      border: 1px solid rgba(255, 255, 255, 0.45);
+      border: 1px solid #e4c27a;
       border-radius: 999px;
       background: transparent;
-      color: #fff;
+      color: #fff6df;
       font-family: inherit;
       font-size: 15px;
     }
     .calendar { padding-top: 4px; }
     .month {
       margin: 0 0 14px;
-      font-size: 20px;
-      letter-spacing: 0.12em;
-      color: #8d7358;
+      color: #8d3f5c;
+      font-family: "Hi Melody", "Nanum Gothic", serif;
+      font-size: 32px;
+      letter-spacing: 0.04em;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 14px;
+      font-size: 15px;
     }
     th, td { padding: 7px 0; font-weight: 400; }
-    th { color: #b08968; font-size: 12px; }
-    td.sun, th.sun { color: #c47a7a; }
-    td.sat, th.sat { color: #7f93b5; }
+    th { color: #a56b86; font-size: 13px; }
+    td.sun, th.sun { color: #d15b78; }
+    td.sat, th.sat { color: #5d7eb8; }
     td.mark span {
       display: inline-grid;
       place-items: center;
-      width: 30px;
-      height: 30px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
-      background: #b08968;
+      background: linear-gradient(180deg, #f6d98a, #c4893a);
       color: #fff;
+      box-shadow: 0 0 0 4px rgba(244, 214, 140, 0.55);
+      font-weight: 700;
     }
     .info {
-      margin: 0 8px;
-      padding: 6px 18px;
-      background: #f6efe6;
-      border-radius: 16px;
+      margin: 0 4px;
+      padding: 8px 18px;
+      background: linear-gradient(180deg, #fff, #fff6f8);
+      border: 1px solid #efd3a2;
+      border-radius: 22px;
+      box-shadow: inset 0 0 0 4px #fff, inset 0 0 0 5px #f8e7c2;
     }
     .row {
       padding: 16px 0;
-      border-bottom: 1px solid #eadfd0;
+      border-bottom: 1px solid #f3d7e2;
     }
     .row:last-child { border-bottom: 0; }
     .label {
       display: block;
       margin-bottom: 2px;
-      color: #b08968;
-      font-size: 12px;
+      color: #a56b86;
+      font-size: 13px;
       letter-spacing: 0.22em;
     }
     .row strong { font-weight: 700; }
-    .place { margin: 2px 0 0; font-size: 14px; color: #7a6a5c; }
+    .place { margin: 2px 0 0; font-size: 15px; color: #6d5568; }
     .button {
       display: block;
       margin: 8px 28px 0;
       padding: 14px;
-      border: 1px solid #b08968;
+      border: 0;
       border-radius: 999px;
-      background: #b08968;
+      background: linear-gradient(180deg, #f0b7c8, #c45b82);
       color: #fff;
       text-align: center;
       text-decoration: none;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.14em;
+      box-shadow: 0 8px 16px rgba(196, 91, 130, 0.28);
     }
     footer {
-      padding: 36px 28px 48px;
+      padding: 32px 28px 48px;
       text-align: center;
-      color: #a08b76;
-      font-size: 13px;
+      color: #a56b86;
+      font-size: 14px;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .sparkle { animation: none; }
     }
   </style>
 </head>
 <body>
   <main class="card">
     <header class="cover">
-      <p class="eyebrow">첫 생일</p>
+      <p class="eyebrow"><span class="sparkle" aria-hidden="true">✦</span> 첫 생일 <span class="sparkle late" aria-hidden="true">✦</span></p>
       <!-- 상단 사진은 사진/메인.jpg 입니다 -->
       <div class="frame">
         <img src="사진/메인.jpg"
@@ -246,8 +334,8 @@
     </header>
 
     <section class="letter">
-      <div class="rule"></div>
-      <h2>초대합니다</h2>
+      <div class="rule" aria-hidden="true">✦</div>
+      <h2><span aria-hidden="true">✦ </span>초대합니다<span aria-hidden="true"> ✦</span></h2>
       <p>
         작은 천사로 우리에게 찾아온<br>
         소중한 하린이가
@@ -256,10 +344,10 @@
       <p>기쁜 날, 함께 축하해 주시면<br>감사하겠습니다.</p>
     </section>
 
-    <!-- 촬영일 기준. D+는 생일 2025년 11월 16일부터 계산하고, 날짜는 사진을 열었을 때만 보입니다. -->
+    <!-- 촬영일 기준. D+는 생일 2025년 11월 16일을 1일로 계산하고, 날짜는 사진을 열었을 때만 보입니다. -->
     <section class="gallery" id="gallery" hidden>
-      <div class="rule"></div>
-      <h2>성장 앨범</h2>
+      <div class="rule" aria-hidden="true">✦</div>
+      <h2><span aria-hidden="true">✦ </span>성장 앨범<span aria-hidden="true"> ✦</span></h2>
       <div class="photos" id="photos"></div>
     </section>
 
@@ -313,7 +401,7 @@
       오시는 길
     </a>
 
-    <footer>소중한 걸음으로 함께해 주세요</footer>
+    <footer><span class="sparkle" aria-hidden="true">✦</span> 소중한 걸음으로 함께해 주세요 <span class="sparkle late" aria-hidden="true">✦</span></footer>
   </main>
 
   <div class="viewer" id="viewer" hidden>
@@ -344,26 +432,58 @@
 
       var birth = "2025-11-16";
       var sources = [
-        { src: "사진/KakaoTalk_20261025_115807410.mp4", date: "2025-04-23", video: true },
-        { src: "사진/KakaoTalk_20261025_113028534.jpg", date: "2025-11-16" },
-        { src: "사진/KakaoTalk_20261025_113135830.jpg", date: "2025-12-04" },
-        { src: "사진/KakaoTalk_20261025_113114382.jpg", date: "2025-12-08" },
-        { src: "사진/KakaoTalk_20261025_113318314.jpg", date: "2026-01-01" },
-        { src: "사진/KakaoTalk_20261025_113359787.jpg", date: "2026-02-18" },
-        { src: "사진/KakaoTalk_20261025_113429147.jpg", date: "2026-03-07" },
-        { src: "사진/KakaoTalk_20261025_113529689.jpg", date: "2026-04-02" },
-        { src: "사진/KakaoTalk_20261025_113647187.jpg", date: "2026-05-07" },
-        { src: "사진/KakaoTalk_20261025_113850179.jpg", date: "2026-06-12" },
-        { src: "사진/KakaoTalk_20261025_114002700.jpg", date: "2026-07-14" },
-        { src: "사진/KakaoTalk_20261025_114023913.jpg", date: "2026-08-15" },
-        { src: "사진/KakaoTalk_20261025_114053718.jpg", date: "2026-08-31" },
-        { src: "사진/KakaoTalk_20261025_121312575.jpg", date: "2026-09-19" },
-        { src: "사진/KakaoTalk_20261025_114332228.jpg", date: "2026-10-03" }
+        { src: "사진/2025-11-16_1.jpg", date: "2025-11-16" },
+        { src: "사진/2025-11-20_1.jpg", date: "2025-11-20" },
+        { src: "사진/2025-12-04_1.jpg", date: "2025-12-04" },
+        { src: "사진/2025-12-13_1.jpg", date: "2025-12-13" },
+        { src: "사진/2025-12-21_1.jpg", date: "2025-12-21" },
+        { src: "사진/2025-12-25_1.jpg", date: "2025-12-25" },
+        { src: "사진/2025-12-31_1.jpg", date: "2025-12-31" },
+        { src: "사진/2026-01-01_1.jpg", date: "2026-01-01" },
+        { src: "사진/2026-01-07_1.jpg", date: "2026-01-07" },
+        { src: "사진/2026-01-07_2.jpg", date: "2026-01-07" },
+        { src: "사진/2026-01-16_1.jpg", date: "2026-01-16" },
+        { src: "사진/2026-01-21_1.jpg", date: "2026-01-21" },
+        { src: "사진/2026-02-14_1.jpg", date: "2026-02-14" },
+        { src: "사진/2026-02-16_1.jpg", date: "2026-02-16" },
+        { src: "사진/2026-02-18_1.jpg", date: "2026-02-18" },
+        { src: "사진/2026-02-22_1.jpg", date: "2026-02-22" },
+        { src: "사진/2026-02-25_1.jpg", date: "2026-02-25" },
+        { src: "사진/2026-03-07_1.jpg", date: "2026-03-07" },
+        { src: "사진/2026-03-11_1.jpg", date: "2026-03-11" },
+        { src: "사진/2026-03-18_1.jpg", date: "2026-03-18" },
+        { src: "사진/2026-03-22_1.jpg", date: "2026-03-22" },
+        { src: "사진/2026-03-26_1.jpg", date: "2026-03-26" },
+        { src: "사진/2026-03-27_1.jpg", date: "2026-03-27" },
+        { src: "사진/2026-04-02_1.jpg", date: "2026-04-02" },
+        { src: "사진/2026-04-02_2.jpg", date: "2026-04-02" },
+        { src: "사진/2026-04-02_3.jpg", date: "2026-04-02" },
+        { src: "사진/2026-04-28_1.jpg", date: "2026-04-28" },
+        { src: "사진/2026-04-28_2.jpg", date: "2026-04-28" },
+        { src: "사진/2026-05-02_1.jpg", date: "2026-05-02" },
+        { src: "사진/2026-05-03_1.jpg", date: "2026-05-03" },
+        { src: "사진/2026-05-05_1.jpg", date: "2026-05-05" },
+        { src: "사진/2026-05-07_1.jpg", date: "2026-05-07" },
+        { src: "사진/2026-05-07_2.jpg", date: "2026-05-07" },
+        { src: "사진/2026-05-08_1.jpg", date: "2026-05-08" },
+        { src: "사진/2026-05-24_1.jpg", date: "2026-05-24" },
+        { src: "사진/2026-05-29_1.jpg", date: "2026-05-29" },
+        { src: "사진/2026-06-03_1.jpg", date: "2026-06-03" },
+        { src: "사진/2026-06-10_1.jpg", date: "2026-06-10" },
+        { src: "사진/2026-06-12_1.jpg", date: "2026-06-12" },
+        { src: "사진/2026-06-15_1.jpg", date: "2026-06-15" },
+        { src: "사진/2026-06-15_2.jpg", date: "2026-06-15" },
+        { src: "사진/2026-07-14_1.jpg", date: "2026-07-14" },
+        { src: "사진/2026-08-15_1.jpg", date: "2026-08-15" },
+        { src: "사진/2026-08-31_1.jpg", date: "2026-08-31" },
+        { src: "사진/2026-09-19_1.jpg", date: "2026-09-19" },
+        { src: "사진/2026-10-03_1.jpg", date: "2026-10-03" },
+        { src: "사진/2026-10-31_1.jpg", date: "2026-10-31" }
       ];
 
       function formatDate(iso) {
         var parts = iso.split("-");
-        return Number(parts[0]) + "년 " + Number(parts[1]) + "월 " + Number(parts[2]) + "일";
+        return parts[0] + "년 " + parts[1] + "월 " + parts[2] + "일";
       }
 
       function daysAfterBirth(iso) {
@@ -374,14 +494,16 @@
         if (!item.date) return "";
         var days = daysAfterBirth(item.date);
         if (days < 0) return formatDate(item.date) + " · 태어나기 " + (-days) + "일 전";
-        return formatDate(item.date) + " · D+" + days;
+        return formatDate(item.date) + " · D+" + (days + 1);
       }
 
       function renderGallery() {
         var section = document.getElementById("gallery");
         var box = document.getElementById("photos");
 
+        var previewCount = 11;
         sources.forEach(function (item, i) {
+          if (i >= previewCount) return;
           var figure = document.createElement("figure");
           figure.className = "photo";
           var button = document.createElement("button");
@@ -408,6 +530,20 @@
           figure.appendChild(button);
           box.appendChild(figure);
         });
+        if (sources.length > previewCount) {
+          var moreFigure = document.createElement("figure");
+          moreFigure.className = "photo";
+          var more = document.createElement("button");
+          more.type = "button";
+          more.className = "more";
+          more.setAttribute("aria-label", "나머지 사진 크게 보기");
+          var moreLabel = document.createElement("span");
+          moreLabel.textContent = "더보기";
+          more.appendChild(moreLabel);
+          more.addEventListener("click", function () { openViewer(previewCount); });
+          moreFigure.appendChild(more);
+          box.appendChild(moreFigure);
+        }
         section.hidden = false;
       }
 
