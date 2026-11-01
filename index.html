@@ -207,18 +207,47 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 18px;
-      padding: 24px 18px 28px;
+      height: 100dvh;
+      cursor: pointer;
+      padding:
+        env(safe-area-inset-top)
+        env(safe-area-inset-right)
+        env(safe-area-inset-bottom)
+        env(safe-area-inset-left);
       background:
         radial-gradient(circle at 20% 12%, rgba(255, 255, 255, 0.18) 0 1px, transparent 2px),
         radial-gradient(circle at 80% 20%, rgba(255, 244, 200, 0.45) 0 1px, transparent 2px),
         rgba(32, 24, 58, 0.94);
     }
+    .viewer-caption {
+      flex: 0 0 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      margin: 0;
+      padding: 0 18px;
+      color: #fff8ea;
+      font-size: 16px;
+      text-align: center;
+    }
+    .viewer-caption[hidden] {
+      display: flex;
+      visibility: hidden;
+    }
+    .viewer-stage {
+      flex: 1 1 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 0;
+      padding: 0 18px;
+    }
     .viewer img,
     .viewer video {
       max-width: 100%;
-      max-height: calc(100vh - 168px);
+      max-height: 100%;
       object-fit: contain;
       border-radius: 16px;
       background: #1b1428;
@@ -226,14 +255,16 @@
     }
     .viewer img[hidden],
     .viewer video[hidden] { display: none; }
-    .viewer-caption {
-      margin: 0;
-      color: #fff8ea;
-      font-size: 16px;
-      text-align: center;
+    .viewer-bar {
+      flex: 0 0 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
     }
-    .viewer-bar { display: flex; gap: 10px; }
     .viewer-bar button {
+      cursor: default;
       min-width: 76px;
       padding: 10px 16px;
       border: 1px solid #e4c27a;
@@ -405,8 +436,10 @@
   </main>
 
   <div class="viewer" id="viewer" hidden>
-    <img id="viewer-img" alt="하린이 사진">
-    <video id="viewer-video" playsinline controls hidden></video>
+    <div class="viewer-stage" id="viewer-stage">
+      <img id="viewer-img" alt="하린이 사진">
+      <video id="viewer-video" playsinline controls hidden></video>
+    </div>
     <p class="viewer-caption" id="viewer-caption"></p>
     <div class="viewer-bar">
       <button type="button" id="viewer-prev">이전</button>
@@ -607,7 +640,9 @@
         showCurrent();
       });
       viewer.addEventListener("click", function (e) {
-        if (e.target === viewer) closeViewer();
+        if (e.target.closest(".viewer-bar")) return;
+        current = (current + 1) % sources.length;
+        showCurrent();
       });
       document.addEventListener("keydown", function (e) {
         if (viewer.hidden) return;
