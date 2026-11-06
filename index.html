@@ -133,6 +133,7 @@
     }
     .letter { padding-top: 0; }
     .letter p { margin: 0 0 8px; font-family: inherit; font-size: 15.5px; line-height: 2; }
+    .gallery { padding-top: 48px; }
     .gallery[hidden],
     .viewer[hidden] { display: none; }
     .photos {
@@ -306,8 +307,7 @@
     }
     .info {
       margin: 0 4px;
-      padding: 4px 0;
-      border-top: 1px solid #e8e0d6;
+      padding: 0 0 4px;
       border-bottom: 1px solid #e8e0d6;
     }
     .row {
@@ -377,14 +377,9 @@
       <p>기쁜 날, 함께 축하해 주시면<br>감사하겠습니다.</p>
     </section>
 
-    <!-- 촬영일 기준. D+는 생일 2025년 11월 16일을 1일로 계산하고, 날짜는 사진을 열었을 때만 보입니다. -->
-    <section class="gallery" id="gallery" hidden>
-      <div class="rule" aria-hidden="true">✦</div>
-      <h2>성장 앨범</h2>
-      <div class="photos" id="photos"></div>
-    </section>
-
     <section>
+      <div class="rule" aria-hidden="true">✦</div>
+      <h2>함께하는 날</h2>
       <div class="info">
         <div class="row">
           <span class="label">일시</span>
@@ -430,6 +425,13 @@
       오시는 길
     </a>
 
+    <!-- 촬영일 기준. D+는 생일 2025년 11월 16일을 1일로 계산하고, 날짜는 사진을 열었을 때만 보입니다. -->
+    <section class="gallery" id="gallery" hidden>
+      <div class="rule" aria-hidden="true">✦</div>
+      <h2>함께한 날들</h2>
+      <div class="photos" id="photos"></div>
+    </section>
+
     <footer>소중한 걸음으로 함께해 주세요</footer>
   </main>
 
@@ -474,7 +476,6 @@
         { src: "사진/2026-04-02_2.jpg", date: "2026-04-02" },
         { src: "사진/2026-04-28_1.jpg", date: "2026-04-28" },
         { src: "사진/2026-05-07_1.jpg", date: "2026-05-07" },
-        { src: "사진/2026-05-07_2.jpg", date: "2026-05-07" },
         { src: "사진/2026-06-12_1.jpg", date: "2026-06-12" },
         { src: "사진/2026-06-15_2.jpg", date: "2026-06-15" },
         { src: "사진/2026-08-15_1.jpg", date: "2026-08-15" },
