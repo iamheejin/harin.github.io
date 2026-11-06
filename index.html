@@ -184,10 +184,24 @@
       color: #1a1a1a;
     }
     .more span {
-      display: grid;
-      place-items: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
       width: 100%;
       height: 100%;
+      line-height: 1.2;
+    }
+    .more-count {
+      font-size: 20px;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+    }
+    .more small {
+      font-size: 11px;
+      color: #9a8f85;
+      letter-spacing: 0.16em;
     }
     .shot.is-video { position: relative; }
     .shot.is-video::after {
@@ -355,8 +369,38 @@
       0% { background-position: 100% 0; }
       100% { background-position: 0 0; }
     }
+    .music {
+      position: fixed;
+      top: calc(env(safe-area-inset-top, 0px) + 14px);
+      right: max(14px, calc(50% - 220px + 14px));
+      z-index: 10;
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      border: 1px solid rgba(26, 26, 26, 0.12);
+      border-radius: 50%;
+      background: rgba(255, 253, 250, 0.85);
+      -webkit-backdrop-filter: blur(6px);
+      backdrop-filter: blur(6px);
+      color: #1a1a1a;
+      cursor: pointer;
+    }
+    .music svg { width: 16px; height: 16px; }
+    .music .bars { display: none; }
+    .music.playing .note { display: none; }
+    .music.playing .bars { display: block; }
+    .music.playing .bars rect { animation: eq 0.9s ease-in-out infinite; transform-origin: bottom; transform-box: fill-box; }
+    .music.playing .bars rect:nth-child(2) { animation-delay: 0.3s; }
+    .music.playing .bars rect:nth-child(3) { animation-delay: 0.6s; }
+    @keyframes eq {
+      0%, 100% { transform: scaleY(0.35); }
+      50% { transform: scaleY(1); }
+    }
     @media (prefers-reduced-motion: reduce) {
       .sparkle { animation: none; }
+      .music.playing .bars rect { animation: none; }
     }
   </style>
 </head>
@@ -440,6 +484,13 @@
 
     <footer>소중한 걸음으로 함께해 주세요</footer>
   </main>
+
+  <!-- 배경음악: 이 폴더에 music.mp3 파일을 넣으면 버튼이 나타납니다 -->
+  <audio id="bgm" src="music.mp3" loop preload="metadata"></audio>
+  <button type="button" class="music" id="music-toggle" aria-label="배경음악 켜기" aria-pressed="false" hidden>
+    <svg class="note" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M6 2.5v7.05A2.5 2.5 0 1 0 7.5 12V5.6l5-1.25v4.2A2.5 2.5 0 1 0 14 11V1L6 2.5Z"/></svg>
+    <svg class="bars" viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="3" width="2.5" height="10" rx="1" fill="currentColor"/><rect x="6.75" y="3" width="2.5" height="10" rx="1" fill="currentColor"/><rect x="11.5" y="3" width="2.5" height="10" rx="1" fill="currentColor"/></svg>
+  </button>
 
   <div class="viewer" id="viewer" hidden>
     <div class="viewer-stage" id="viewer-stage">
@@ -551,9 +602,16 @@
           var more = document.createElement("button");
           more.type = "button";
           more.className = "more";
-          more.setAttribute("aria-label", "나머지 사진 크게 보기");
+          var remaining = sources.length - previewCount;
+          more.setAttribute("aria-label", "나머지 사진 " + remaining + "장 크게 보기");
           var moreLabel = document.createElement("span");
-          moreLabel.textContent = "더보기";
+          var moreCount = document.createElement("b");
+          moreCount.className = "more-count";
+          moreCount.textContent = "+" + remaining;
+          var moreText = document.createElement("small");
+          moreText.textContent = "더보기";
+          moreLabel.appendChild(moreCount);
+          moreLabel.appendChild(moreText);
           more.appendChild(moreLabel);
           more.addEventListener("click", function () { openViewer(previewCount); });
           moreFigure.appendChild(more);
@@ -563,6 +621,167 @@
       }
 
       renderGallery();
+
+      // 배경음악
+      // - music.mp3 파일이 있으면 그 곡을 재생합니다.
+      // - 없으면 페이지가 직접 연주하는 잔잔한 오르골 자장가를 재생합니다.
+      // - 휴대폰은 자동재생을 막으므로, 첫 터치 때 재생을 시작합니다.
+      var bgm = document.getElementById("bgm");
+      var musicBtn = document.getElementById("music-toggle");
+      var musicOffByUser = false;
+      var resumeOnReturn = false;
+      var useFile = false;
+
+      var musicBox = (function () {
+        var Ctx = window.AudioContext || window.webkitAudioContext;
+        if (!Ctx) return null;
+        var ctx, master, verb, timer, nextTime, step = 0, running = false;
+        var beat = 60 / 66;
+
+        function hz(n) { return 440 * Math.pow(2, (n - 69) / 12); }
+        var N = { G2: 43, A2: 45, B2: 47, C3: 48, D3: 50, E3: 52, F3: 53, G3: 55, A3: 57,
+                  B3: 59, C4: 60, D4: 62, E4: 64, F4: 65, G4: 67, A4: 69, B4: 71,
+                  C5: 72, D5: 74, E5: 76, F5: 77, G5: 79, A5: 81, B5: 83, C6: 84 };
+
+        // 3/4박자 8마디. 각 마디: 멜로디 [음, 박], 반주 화음, 베이스
+        var bars = [
+          { mel: [["E5", 1], ["G5", 1], ["C6", 1]], arp: ["C4", "G4", "E4"], bass: "C3" },
+          { mel: [["B5", 1.5], ["A5", 0.5], ["G5", 1]], arp: ["A3", "E4", "C4"], bass: "A2" },
+          { mel: [["A5", 1], ["G5", 1], ["F5", 1]], arp: ["F3", "C4", "A3"], bass: "F3" },
+          { mel: [["E5", 2], ["D5", 1]], arp: ["G3", "D4", "B3"], bass: "G2" },
+          { mel: [["E5", 1], ["G5", 1], ["C6", 1]], arp: ["C4", "G4", "E4"], bass: "C3" },
+          { mel: [["D5", 1.5], ["C5", 0.5], ["A4", 1]], arp: ["A3", "E4", "C4"], bass: "A2" },
+          { mel: [["F5", 1], ["E5", 1], ["D5", 1]], arp: ["G3", "D4", "B3"], bass: "G2" },
+          { mel: [["C5", 3]], arp: ["C4", "G4", "E4"], bass: "C3" }
+        ];
+
+        function init() {
+          // 아이폰 무음 스위치가 켜져 있어도 소리가 나도록 미디어 재생으로 지정
+          try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) {}
+          ctx = new Ctx();
+          master = ctx.createGain();
+          master.gain.value = 0;
+          // 부드러운 잔향
+          verb = ctx.createConvolver();
+          var len = ctx.sampleRate * 2.8, ir = ctx.createBuffer(2, len, ctx.sampleRate);
+          for (var c = 0; c < 2; c++) {
+            var d = ir.getChannelData(c);
+            for (var i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3);
+          }
+          verb.buffer = ir;
+          var wet = ctx.createGain(); wet.gain.value = 0.35;
+          var tone = ctx.createBiquadFilter(); tone.type = "lowpass"; tone.frequency.value = 4200;
+          master.connect(tone);
+          tone.connect(ctx.destination);
+          tone.connect(verb); verb.connect(wet); wet.connect(ctx.destination);
+        }
+
+        // 오르골 음색: 기음 + 약한 배음, 짧게 울리고 천천히 사라짐
+        function pluck(note, t, vol, length) {
+          var f = hz(N[note]);
+          [[1, 1], [2, 0.18], [4.1, 0.05]].forEach(function (p) {
+            var o = ctx.createOscillator(), g = ctx.createGain();
+            o.type = "sine";
+            o.frequency.value = f * p[0];
+            var dur = length / (p[0] > 1 ? 2.5 : 1);
+            g.gain.setValueAtTime(0, t);
+            g.gain.linearRampToValueAtTime(vol * p[1], t + 0.006);
+            g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+            o.connect(g); g.connect(master);
+            o.start(t); o.stop(t + dur + 0.05);
+          });
+        }
+
+        function scheduleBar(bar, t) {
+          pluck(bar.bass, t, 0.18, 3.2);
+          // 반주: 8분음표 아르페지오
+          for (var i = 0; i < 6; i++) pluck(bar.arp[i % 3], t + i * beat / 2, 0.07, 1.6);
+          var at = t;
+          bar.mel.forEach(function (m) {
+            pluck(m[0], at, 0.26, Math.max(1.8, m[1] * beat * 1.6));
+            at += m[1] * beat;
+          });
+        }
+
+        function tick() {
+          while (nextTime < ctx.currentTime + 1.2) {
+            scheduleBar(bars[step % bars.length], nextTime);
+            nextTime += beat * 3;
+            step++;
+          }
+        }
+
+        return {
+          get paused() { return !running; },
+          play: function () {
+            if (!ctx) init();
+            var p = ctx.resume ? ctx.resume() : Promise.resolve();
+            return Promise.resolve(p).then(function () {
+              if (running) return;
+              running = true;
+              var now = ctx.currentTime;
+              master.gain.cancelScheduledValues(now);
+              master.gain.setValueAtTime(master.gain.value, now);
+              master.gain.linearRampToValueAtTime(0.9, now + 1.2);
+              if (!nextTime || nextTime < now) nextTime = now + 0.1;
+              tick();
+              timer = setInterval(tick, 300);
+            });
+          },
+          pause: function () {
+            if (!ctx || !running) return;
+            running = false;
+            clearInterval(timer);
+            var now = ctx.currentTime;
+            master.gain.cancelScheduledValues(now);
+            master.gain.setValueAtTime(master.gain.value, now);
+            master.gain.linearRampToValueAtTime(0, now + 0.4);
+            setTimeout(function () { if (!running) { ctx.suspend(); nextTime = 0; step = 0; } }, 450);
+          }
+        };
+      })();
+
+      function player() { return useFile ? bgm : musicBox; }
+
+      function setMusicUI(playing) {
+        musicBtn.classList.toggle("playing", playing);
+        musicBtn.setAttribute("aria-pressed", playing ? "true" : "false");
+        musicBtn.setAttribute("aria-label", playing ? "배경음악 끄기" : "배경음악 켜기");
+      }
+      function playMusic() {
+        var p = player();
+        if (!p) return;
+        if (useFile) bgm.volume = 0.6;
+        Promise.resolve(p.play()).then(function () { setMusicUI(true); }).catch(function () { setMusicUI(false); });
+      }
+      function pauseMusic() {
+        var p = player();
+        if (p) p.pause();
+        setMusicUI(false);
+      }
+      function startOnFirstTouch(e) {
+        document.removeEventListener("pointerup", startOnFirstTouch, true);
+        document.removeEventListener("touchend", startOnFirstTouch, true);
+        if (musicOffByUser || (e.target.closest && e.target.closest("#music-toggle"))) return;
+        playMusic();
+      }
+
+      if (musicBox) musicBtn.hidden = false;
+      bgm.addEventListener("loadedmetadata", function () { useFile = true; musicBtn.hidden = false; });
+      musicBtn.addEventListener("click", function () {
+        var p = player();
+        if (!p) return;
+        if (p.paused) { musicOffByUser = false; playMusic(); }
+        else { musicOffByUser = true; pauseMusic(); }
+      });
+      document.addEventListener("pointerup", startOnFirstTouch, true);
+      document.addEventListener("touchend", startOnFirstTouch, true);
+      document.addEventListener("visibilitychange", function () {
+        var p = player();
+        if (!p) return;
+        if (document.hidden && !p.paused) { pauseMusic(); resumeOnReturn = true; }
+        else if (!document.hidden && resumeOnReturn && !musicOffByUser) { resumeOnReturn = false; playMusic(); }
+      });
 
       var viewer = document.getElementById("viewer");
       var viewerImg = document.getElementById("viewer-img");
