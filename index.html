@@ -486,7 +486,7 @@
   </main>
 
   <!-- 배경음악: 이 폴더에 music.mp3 파일을 넣으면 버튼이 나타납니다 -->
-  <audio id="bgm" src="music.mp3" loop preload="metadata"></audio>
+  <audio id="bgm" src="music.mp3" loop preload="auto"></audio>
   <button type="button" class="music" id="music-toggle" aria-label="배경음악 켜기" aria-pressed="false" hidden>
     <svg class="note" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M6 2.5v7.05A2.5 2.5 0 1 0 7.5 12V5.6l5-1.25v4.2A2.5 2.5 0 1 0 14 11V1L6 2.5Z"/></svg>
     <svg class="bars" viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="3" width="2.5" height="10" rx="1" fill="currentColor"/><rect x="6.75" y="3" width="2.5" height="10" rx="1" fill="currentColor"/><rect x="11.5" y="3" width="2.5" height="10" rx="1" fill="currentColor"/></svg>
@@ -630,7 +630,7 @@
       var musicBtn = document.getElementById("music-toggle");
       var musicOffByUser = false;
       var resumeOnReturn = false;
-      var useFile = false;
+      var useFile = true; // music.mp3가 없거나 재생이 안 되면 오르골로 대신 재생
 
       var musicBox = (function () {
         var Ctx = window.AudioContext || window.webkitAudioContext;
@@ -757,7 +757,9 @@
         var p = player();
         if (!p) return;
         if (useFile) bgm.volume = 0.6;
-        Promise.resolve(p.play()).then(function () { setMusicUI(true); }).catch(function () { setMusicUI(false); });
+        Promise.resolve(p.play()).then(function () { setMusicUI(true); }).catch(function () {
+          if (useFile && bgm.error) { useFile = false; playMusic(); } else setMusicUI(false);
+        });
       }
       function pauseMusic() {
         var p = player();
@@ -771,8 +773,8 @@
         playMusic();
       }
 
-      if (musicBox) musicBtn.hidden = false;
-      bgm.addEventListener("loadedmetadata", function () { useFile = true; musicBtn.hidden = false; });
+      musicBtn.hidden = false;
+      bgm.addEventListener("error", function () { useFile = false; });
       musicBtn.addEventListener("click", function () {
         var p = player();
         if (!p) return;
